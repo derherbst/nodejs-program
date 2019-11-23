@@ -1,0 +1,23 @@
+{
+  "name": "nodejs-program",
+  "version": "1.0.0",
+  "description": "Repository for nodejs course homework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "task1": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/derherbst/nodejs-program.git"
+  },
+  "author": "Georgii Gerbst",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/derherbst/nodejs-program/issues"
+  },
+  "homepage": "https://github.com/derherbst/nodejs-program#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.0"
+  }
+}
