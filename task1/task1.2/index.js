@@ -1,9 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const csvToJson = require('csvtojson')
+import fs from 'fs';
+import path from 'path';
+import csvToJson from 'csvtojson';
+
 const csvFilePath = path.join(__dirname, '/example.csv');
 const fileOutputPath = path.join(__dirname, '/result.txt');
-
 
 csvToJson()
 	.fromFile(csvFilePath)
