@@ -22,16 +22,7 @@
     "@babel/core": "^7.7.4",
     "@babel/node": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
-<<<<<<< HEAD
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
-    "nodemon": "^2.0.0"
-  },
-  "dependencies": {
-    "csvtojson": "^2.0.10"
-=======
+    "csvtojson": "^2.0.10",
     "nodemon": "^2.0.1"
->>>>>>> master
   }
 }
