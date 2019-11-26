@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/derherbst/nodejs-program#readme",
   "devDependencies": {
-    "nodemon": "^2.0.0"
+    "@babel/core": "^7.7.4",
+    "@babel/node": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "nodemon": "^2.0.1"
   }
 }
