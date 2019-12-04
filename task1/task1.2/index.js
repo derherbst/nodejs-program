@@ -17,6 +17,35 @@ const inputFileLine = readline.createInterface({
 	output,
 })
 
-inputFileLine.on('line', (line) => {	
-	// ...
+const transformKeysToLowercase = (inputObj) => {
+	return Object.keys(inputObj).reduce((acc, curr) => {
+		return {
+			...acc,
+			[`${curr.toLowerCase()}`]: inputObj[curr],
+		}
+	}, {})
+}
+
+let headers;
+
+inputFileLine.on('line', (line) => {
+
+	if (!headers) {
+		headers = line.split(',');
+		return;
+	}
+
+	csvToJson({
+		headers: headers,
+        noheader: true,
+	})
+	.fromString(line)
+	.then((jsonObj) => {
+		let bookInfo = jsonObj[0];
+		delete bookInfo['Amount'];
+		bookInfo = transformKeysToLowercase(bookInfo);
+		
+		output.write(`${JSON.stringify(bookInfo)} \n`);
+	})
+	
 })
