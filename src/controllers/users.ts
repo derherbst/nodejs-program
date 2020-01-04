@@ -6,16 +6,17 @@ import { User, userSchema } from '../models/user';
 import { getAutoSuggestUsers, checkLogin } from '../helpers/helpers';
 import { ValidatedRequest } from 'express-joi-validation'
 
-const USERS: UserType[] = [];
+const USERS: UserType['query'][] = [];
 
 export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res, next) => {
-    const body: UserType = req.body;
+    const body: UserType['query'] = req.body;
     const {
         login,
         password,
         age,
         isDeleted,
     } = body;
+    
     const userId: string = uuid();
     const newUser = new User(
         userId,

@@ -3,7 +3,7 @@ import { ContainerTypes, ValidatedRequestSchema } from 'express-joi-validation';
 import 'joi-extract-type'
 
 export interface UserType extends ValidatedRequestSchema {
-    [ContainerTypes.Fields]: {
+    [ContainerTypes.Query]: {
         id: string,
         login: string,
         password: string,

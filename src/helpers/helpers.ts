@@ -1,6 +1,6 @@
 import { UserType } from '../types/types';
 
-export const getAutoSuggestUsers = (data: UserType[], loginSubstring: string, limit: number) => {
+export const getAutoSuggestUsers = (data: UserType['fields'][], loginSubstring: string, limit: number) => {
     const sortedByLoginData = data.sort((a, b) => a.login.toLowerCase().localeCompare(b.login.toLowerCase()));
     const filteredByLoginSubstring = sortedByLoginData.filter((user) => user.login.indexOf(loginSubstring) !== -1);
     const limetedUsersCollection = filteredByLoginSubstring.slice(0, limit);
