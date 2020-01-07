@@ -8,9 +8,9 @@ const validator = createValidator({
     passError: true,
 });
 
-router.post('/', validator.query(userSchema), createUser);
+router.post('/', createUser);
 router.get('/', getUsers);
-router.patch('/:id', validator.query(userSchema), updateUser);
+router.patch('/:id', updateUser);
 router.delete('/:id', deleteUser);
 
 export default router;

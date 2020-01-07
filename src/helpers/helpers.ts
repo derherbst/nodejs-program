@@ -8,11 +8,12 @@ export const getAutoSuggestUsers = (data: UserType['fields'][], loginSubstring: 
     return limetedUsersCollection;
 }
 
-export const checkLogin = (data, login) => {
-    if (data.length === 0) {
+export const checkLoginExists = (data, login) => {
+    if (data && data.length === 0) {
         return true;
     }
-    const user = data.find(user => user.login === login);
+    
+    const userExists = data.some(user => user.login === login);
 
-    return user.length === 0;
+    return !userExists;
 }
