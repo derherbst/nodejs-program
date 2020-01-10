@@ -1,6 +1,5 @@
-import Joi from '@hapi/joi';
 import { ContainerTypes, ValidatedRequestSchema } from 'express-joi-validation';
-import 'joi-extract-type'
+import 'joi-extract-type';
 
 export interface UserType extends ValidatedRequestSchema {
     [ContainerTypes.Query]: {
