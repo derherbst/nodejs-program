@@ -21,8 +21,6 @@ export const checkIfLoginAvailable = (data, login): boolean => {
 }
 
 export const validateUserData = (req, res, next): void => {
-    console.log("USERS", USERS);
-    console.log("PARAMS", req.params);
     const isLoginAvailable = checkIfLoginAvailable(USERS, req.body.login);
     const result = userSchema.validate(req.body);
     const { error } = result;
@@ -43,3 +41,18 @@ export const validateUserData = (req, res, next): void => {
         }
     }
 };
+
+export const prepareDataForUpdateValidation = (req, res, next) => {
+    const userIndex = USERS.findIndex(user => user.id === req.params.id);
+    const newData = { ...USERS[userIndex], ...req.body };
+
+    if (userIndex < 0) {
+        res.status(404).json({
+            status: 'failed',
+            message: 'Could not find user!'
+        }).end();
+    } else {
+        req.body = newData;
+        next();
+    }
+}
