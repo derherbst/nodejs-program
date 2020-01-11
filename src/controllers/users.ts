@@ -52,10 +52,9 @@ export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res)
 
 export const getUsers: RequestHandler = (req, res) => {
     const { loginSubstring, limit } = req.query;
-    let suggestedUsers = USERS;
-    if (loginSubstring && limit) {
-        suggestedUsers = getAutoSuggestUsers(USERS, loginSubstring, limit);
-    }
+    const suggestedUsers = (loginSubstring && limit)
+        ? getAutoSuggestUsers(USERS, loginSubstring, limit)
+        : USERS;
     res.json({ users: suggestedUsers });
 }
 
