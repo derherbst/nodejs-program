@@ -8,7 +8,7 @@ export const getAutoSuggestUsers = (data: UserType['fields'][], loginSubstring: 
     return limetedUsersCollection;
 }
 
-export const checkLoginExists = (data, login): boolean => {
+export const checkIfLoginAvailable = (data, login): boolean => {
     if (data && data.length === 0) {
         return true;
     }
@@ -17,9 +17,9 @@ export const checkLoginExists = (data, login): boolean => {
     console.log("login", login);
     
     
-    const userExists = data.some(user => user.login === login);
+    const result = data.some(user => user.login === login);
 
-    console.log(userExists);
+    console.log(result);
 
-    return !userExists;
+    return !result;
 }

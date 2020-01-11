@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import { v4 as uuid } from 'uuid';
 import { UserType } from '../types/types';
 import { User, userSchema } from '../models/user';
-import { getAutoSuggestUsers, checkLoginExists } from '../helpers/helpers';
+import { getAutoSuggestUsers, checkIfLoginAvailable } from '../helpers/helpers';
 import { ValidatedRequest } from 'express-joi-validation'
 
 const USERS: UserType['query'][] = [];
@@ -24,7 +24,7 @@ export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res)
         age,
         isDeleted
     );
-    const isLoginAvailable = checkLoginExists(USERS, login);
+    const isLoginAvailable = checkIfLoginAvailable(USERS, login);
     const result = userSchema.validate(body);
     const { error } = result;
 
@@ -48,7 +48,6 @@ export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res)
         }
         
     }
-    
 }
 
 export const getUsers: RequestHandler = (req, res) => {
@@ -66,7 +65,7 @@ export const updateUser: RequestHandler = (req, res) => {
     const userId = req.params.id;
     const newData = req.body;
     const userIndex = USERS.findIndex(user => user.id === userId);
-    const isLoginAvailable = checkLoginExists(USERS, req.params.login);
+    const isLoginAvailable = checkIfLoginAvailable(USERS, req.params.login);
     const result = userSchema.validate(newData);
     const { error } = result;
 
