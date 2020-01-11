@@ -16,6 +16,6 @@ export class User {
         public age: number,
         public isDeleted: boolean
     ) {
-        
+
     }
-}
+};

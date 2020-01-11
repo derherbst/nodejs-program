@@ -28,25 +28,27 @@ export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res)
     const result = userSchema.validate(body);
     const { error } = result;
 
-    if (isLoginAvailable) {
-        if (error != null) {
-            res.status(400).json({
-                status: 'error',
-                error: error,
-            });
-        } else {
+    if (error != null) {
+        res.status(400).json({
+            status: 'error',
+            error: error,
+        });
+    } else {
+        if (isLoginAvailable) {
             USERS.push(newUser);
             res.status(200).json({
                 message: 'User was created!',
                 createdUser: newUser,
             });
+        } else {
+            res.status(400).json({
+                status: 'error',
+                message: `User ${login} already exists!`,
+            });
         }
-    } else {
-        res.status(400).json({
-            status: 'error',
-            message: `User ${login} already exists!`,
-        });
+        
     }
+    
 }
 
 export const getUsers: RequestHandler = (req, res) => {
@@ -60,7 +62,7 @@ export const getUsers: RequestHandler = (req, res) => {
 
 export const updateUser: RequestHandler = (req, res) => {
     console.log("PARAMS", req.params);
-    
+
     const userId = req.params.id;
     const newData = req.body;
     const userIndex = USERS.findIndex(user => user.id === userId);
@@ -68,13 +70,13 @@ export const updateUser: RequestHandler = (req, res) => {
     const result = userSchema.validate(newData);
     const { error } = result;
 
-    if (isLoginAvailable) {
-        if (error != null) {
-            res.status(400).json({
-                status: 'error',
-                error: error,
-            });
-        } else {
+    if (error != null) {
+        res.status(400).json({
+            status: 'error',
+            error: error,
+        });
+    } else {
+        if (isLoginAvailable) {
             if (userIndex < 0) {
                 res.status(404).json({
                     status: 'failed',
@@ -87,12 +89,12 @@ export const updateUser: RequestHandler = (req, res) => {
                     updatedUser: USERS[userIndex],
                 });
             }
+        } else {
+            res.status(400).json({
+                status: 'error',
+                message: `User ${req.params.login} already exists!`,
+            });
         }
-    } else {
-        res.status(400).json({
-            status: 'error',
-            message: `User ${req.params.login} already exists!`,
-        });
     }
 }
 
