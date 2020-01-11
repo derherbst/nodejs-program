@@ -29,7 +29,7 @@ export const validateUserData = (req, res, next): void => {
         res.status(400).json({
             status: 'error',
             error: error,
-        }).end();;
+        }).end();
     } else {
         if (isLoginAvailable) {
             next();
@@ -37,7 +37,7 @@ export const validateUserData = (req, res, next): void => {
             res.status(400).json({
                 status: 'error',
                 message: `User ${req.body.login} already exists!`,
-            }).end();;
+            }).end();
         }
     }
 };
