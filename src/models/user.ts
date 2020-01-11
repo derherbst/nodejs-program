@@ -4,7 +4,7 @@ export const userSchema = Joi.object({
     id: Joi.string().uuid().optional(),
     login: Joi.string().required(),
     password: Joi.string().required().alphanum(),
-    age: Joi.number().min(4).max(130),
+    age: Joi.number().min(4).max(130).required(),
     isDeleted: Joi.boolean(),
 });
 
