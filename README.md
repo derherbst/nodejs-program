@@ -8,3 +8,7 @@ expected output
 {"book":"The Miracle Morning","author":"Hal Elrod","price":21.34}
 {"book":"Influence: The Psychology of Persuasion","author":"Robert B. Cialdini","price":12.99}
 {"book":"The ONE Thing","author":"Gary Keller","price":11.18}
+
+TASK 2
+
+npm run task3
