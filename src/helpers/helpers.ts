@@ -1,6 +1,4 @@
 import { UserType } from '../types/types';
-import { userSchema } from '../models/user';
-import { USERS } from '../data/users';
 
 export const getAutoSuggestUsers = (data: UserType['fields'][], loginSubstring: string, limit: number) => {
     const sortedByLoginData = data.sort((a, b) => a.login.toLowerCase().localeCompare(b.login.toLowerCase()));

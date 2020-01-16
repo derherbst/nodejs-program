@@ -5,6 +5,7 @@ import { UserType } from '../types/types';
 import { User } from '../models/user';
 import { getAutoSuggestUsers, checkIfLoginAvailable } from '../helpers/helpers';
 import { USERS } from '../data/users';
+import { userSchema } from './../models/user';
 
 export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res) => {
     const body: UserType['query'] = req.body;
