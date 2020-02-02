@@ -26,5 +26,3 @@ nmp run create
 nmp run dev
 ```
 **To run the app**
-
-![alt text](https://c7.hotpng.com/preview/534/940/907/rocket-launch-project-portfolio-management-vector-rocket-launch.jpg)
