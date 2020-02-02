@@ -1,7 +1,12 @@
 import express, { Request, Response } from 'express';
 import { json } from 'body-parser';
-
+import { sequelize } from './config/database';
 import userRoutes from './routes/users';
+import { PORT } from './helpers/helpers';
+
+sequelize.authenticate()
+    .then(() => console.log('DB connected...'))
+    .catch((err) => console.log('Error:', err));
 
 const app = express();
 
@@ -17,4 +22,4 @@ app.use((
     res.status(500).json({ message: err.message });
 });
 
-app.listen(3004);
+app.listen(PORT);
