@@ -3,23 +3,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const sequelize_1 = require("sequelize");
 const joi_1 = __importDefault(require("@hapi/joi"));
+const database_1 = require("../config/database");
+const helpers_1 = require("../helpers/helpers");
 exports.userSchema = joi_1.default.object({
     id: joi_1.default.string().uuid().optional(),
     login: joi_1.default.string().required(),
     password: joi_1.default.string().required().alphanum(),
-    age: joi_1.default.number().min(4).max(130).required(),
+    age: joi_1.default.number().min(helpers_1.USER_MIN_AGE).max(helpers_1.USER_MAX_AGE).required(),
     isDeleted: joi_1.default.boolean(),
 });
-class User {
-    constructor(id, login, password, age, isDeleted) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.age = age;
-        this.isDeleted = isDeleted;
+exports.UserModel = database_1.sequelize.define('users', {
+    id: {
+        type: sequelize_1.DataTypes.UUIDV4,
+        defaultValue: sequelize_1.DataTypes.UUIDV4,
+        primaryKey: true,
+        allowNull: false,
+    },
+    login: {
+        type: sequelize_1.DataTypes.STRING,
+    },
+    password: {
+        type: sequelize_1.DataTypes.STRING,
+    },
+    age: {
+        type: sequelize_1.DataTypes.INTEGER,
+        validate: {
+            min: 4,
+            max: 130,
+        }
+    },
+    isDeleted: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
     }
-}
-exports.User = User;
-;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidXNlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9tb2RlbHMvdXNlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBQUFBLG9EQUEyQjtBQUVkLFFBQUEsVUFBVSxHQUFHLGFBQUcsQ0FBQyxNQUFNLENBQUM7SUFDakMsRUFBRSxFQUFFLGFBQUcsQ0FBQyxNQUFNLEVBQUUsQ0FBQyxJQUFJLEVBQUUsQ0FBQyxRQUFRLEVBQUU7SUFDbEMsS0FBSyxFQUFFLGFBQUcsQ0FBQyxNQUFNLEVBQUUsQ0FBQyxRQUFRLEVBQUU7SUFDOUIsUUFBUSxFQUFFLGFBQUcsQ0FBQyxNQUFNLEVBQUUsQ0FBQyxRQUFRLEVBQUUsQ0FBQyxRQUFRLEVBQUU7SUFDNUMsR0FBRyxFQUFFLGFBQUcsQ0FBQyxNQUFNLEVBQUUsQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMsR0FBRyxDQUFDLEdBQUcsQ0FBQyxDQUFDLFFBQVEsRUFBRTtJQUM1QyxTQUFTLEVBQUUsYUFBRyxDQUFDLE9BQU8sRUFBRTtDQUMzQixDQUFDLENBQUM7QUFFSCxNQUFhLElBQUk7SUFDYixZQUNXLEVBQVUsRUFDVixLQUFhLEVBQ2IsUUFBZ0IsRUFDaEIsR0FBVyxFQUNYLFNBQWtCO1FBSmxCLE9BQUUsR0FBRixFQUFFLENBQVE7UUFDVixVQUFLLEdBQUwsS0FBSyxDQUFRO1FBQ2IsYUFBUSxHQUFSLFFBQVEsQ0FBUTtRQUNoQixRQUFHLEdBQUgsR0FBRyxDQUFRO1FBQ1gsY0FBUyxHQUFULFNBQVMsQ0FBUztJQUc3QixDQUFDO0NBQ0o7QUFWRCxvQkFVQztBQUFBLENBQUMifQ==
+}, {
+    timestamps: false,
+});
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidXNlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9tb2RlbHMvdXNlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBQUFBLHlDQUFzQztBQUN0QyxvREFBNEI7QUFDNUIsaURBQStDO0FBQy9DLGdEQUFnRTtBQUVuRCxRQUFBLFVBQVUsR0FBRyxhQUFHLENBQUMsTUFBTSxDQUFDO0lBQ2pDLEVBQUUsRUFBRSxhQUFHLENBQUMsTUFBTSxFQUFFLENBQUMsSUFBSSxFQUFFLENBQUMsUUFBUSxFQUFFO0lBQ2xDLEtBQUssRUFBRSxhQUFHLENBQUMsTUFBTSxFQUFFLENBQUMsUUFBUSxFQUFFO0lBQzlCLFFBQVEsRUFBRSxhQUFHLENBQUMsTUFBTSxFQUFFLENBQUMsUUFBUSxFQUFFLENBQUMsUUFBUSxFQUFFO0lBQzVDLEdBQUcsRUFBRSxhQUFHLENBQUMsTUFBTSxFQUFFLENBQUMsR0FBRyxDQUFDLHNCQUFZLENBQUMsQ0FBQyxHQUFHLENBQUMsc0JBQVksQ0FBQyxDQUFDLFFBQVEsRUFBRTtJQUNoRSxTQUFTLEVBQUUsYUFBRyxDQUFDLE9BQU8sRUFBRTtDQUMzQixDQUFDLENBQUM7QUFFVSxRQUFBLFNBQVMsR0FBRyxvQkFBUyxDQUFDLE1BQU0sQ0FBQyxPQUFPLEVBQUU7SUFDL0MsRUFBRSxFQUFFO1FBQ0EsSUFBSSxFQUFFLHFCQUFTLENBQUMsTUFBTTtRQUN0QixZQUFZLEVBQUUscUJBQVMsQ0FBQyxNQUFNO1FBQzlCLFVBQVUsRUFBRSxJQUFJO1FBQ2hCLFNBQVMsRUFBRSxLQUFLO0tBQ25CO0lBQ0QsS0FBSyxFQUFFO1FBQ0gsSUFBSSxFQUFFLHFCQUFTLENBQUMsTUFBTTtLQUN6QjtJQUNELFFBQVEsRUFBRTtRQUNOLElBQUksRUFBRSxxQkFBUyxDQUFDLE1BQU07S0FDekI7SUFDRCxHQUFHLEVBQUU7UUFDRCxJQUFJLEVBQUUscUJBQVMsQ0FBQyxPQUFPO1FBQ3ZCLFFBQVEsRUFBRTtZQUNOLEdBQUcsRUFBRSxDQUFDO1lBQ04sR0FBRyxFQUFFLEdBQUc7U0FDWDtLQUNKO0lBQ0QsU0FBUyxFQUFFO1FBQ1AsSUFBSSxFQUFFLHFCQUFTLENBQUMsT0FBTztRQUN2QixZQUFZLEVBQUUsS0FBSztRQUNuQixTQUFTLEVBQUUsS0FBSztLQUNuQjtDQUVKLEVBQUU7SUFDQyxVQUFVLEVBQUUsS0FBSztDQUNwQixDQUFDLENBQUMifQ==

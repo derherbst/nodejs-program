@@ -11,4 +11,18 @@ expected output
 
 TASK 2
 
-npm run task3
+npm run dev
+
+# TASK 3
+
+To create database and table run
+
+```
+nmp run create
+```
+**it will create db and table based on your config data... And then run**
+
+```
+nmp run dev
+```
+**To run the app**

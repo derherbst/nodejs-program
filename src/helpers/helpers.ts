@@ -1,19 +1,6 @@
-import { UserType } from '../types/types';
+export const USER_MIN_AGE = 4;
+export const USER_MAX_AGE = 130;
+export const PORT = 3004;
 
-export const getAutoSuggestUsers = (data: UserType['fields'][], loginSubstring: string, limit: number) => {
-    const sortedByLoginData = data.sort((a, b) => a.login.toLowerCase().localeCompare(b.login.toLowerCase()));
-    const filteredByLoginSubstring = sortedByLoginData.filter((user) => user.login.includes(loginSubstring));
-    const limetedUsersCollection = filteredByLoginSubstring.slice(0, limit);
-
-    return limetedUsersCollection;
-};
-
-export const checkIfLoginAvailable = (data, login): boolean => {
-    if (data && data.length === 0) {
-        return true;
-    }
-    
-    const result = data.some(user => user.login === login);
-
-    return !result;
-};
+export const CREATE_TABLE = 'CREATE TABLE IF NOT EXISTS "users" ("id" UUID NOT NULL , "login" VARCHAR(255) NOT NULL, "password" VARCHAR(255) NOT NULL, "age" INTEGER NOT NULL, "isDeleted" BOOLEAN NOT NULL, PRIMARY KEY ("id"));';
+export const DROP_TABLE = 'DROP TABLE "users";';
