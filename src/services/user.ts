@@ -13,10 +13,6 @@ class User {
             : dataAccess.getAllUsers(limit)
     };
 
-    validateUserData = async (inputData) => {
-        
-    };
-
     createUser = async (inputData) => {
         const user = await dataAccess.getUserByParams('login', inputData.login);
         

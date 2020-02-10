@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { json } from 'body-parser';
 import { sequelize } from './config/database';
 import userRoutes from './routes/users';
+import groupRoutes from './routes/groups';
 import { PORT } from './helpers/helpers';
 
 sequelize.authenticate()
@@ -13,6 +14,7 @@ const app = express();
 app.use(json());
 
 app.use('/users', userRoutes);
+app.use('/groups', groupRoutes);
 
 app.use((
     err: Error,

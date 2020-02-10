@@ -40,3 +40,5 @@ export const UserModel = sequelize.define('users', {
 }, {
     timestamps: false,
 });
+
+UserModel.associations
