@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import Joi from '@hapi/joi';
 import { sequelize } from '../config/database';
 
-export const UserGroup = sequelize.define('userGroup', {
+export const UserGroup = sequelize.define('UserGroups', {
     id: {
         type: DataTypes.UUIDV4,
         defaultValue: DataTypes.UUIDV4,

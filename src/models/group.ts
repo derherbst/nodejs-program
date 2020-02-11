@@ -33,7 +33,7 @@ const Groups = sequelize.define('groups', {
 
 Groups.associate = (models) => {
     Groups.belongsToMany(models.UserModel, {
-        through: models.UserGroup,
+        through: 'UserGroups',
         as: 'users',
         foreignKey: 'groupId'
     });

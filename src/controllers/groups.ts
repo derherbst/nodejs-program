@@ -112,5 +112,8 @@ export const addUsersToGroup: RequestHandler = (req, res) => {
     const userIds = req.query.userIds;
 
     groupService.addUsersToGroup(groupId, userIds)
-        .then()
+        .then(groups => {
+            console.log("============================", groups);
+        })
+        .catch(err => console.log(err));
 }

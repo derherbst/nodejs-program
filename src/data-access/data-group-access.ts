@@ -72,14 +72,16 @@ class DataGroupAccess {
             });
 
             const [group, users] = await Promise.all([groupPromise, usersPromise]);
+            let final = [];
             usersIds.forEach(async (userId) => {
-                
-                console.log("GROUP!!!!!!!!!!!!", group);
-                console.log("users!!!!!!!!!!!!", users);
                 const result = await this.userGroupModel.create({groupId: group.id, userId}, { returning: true });
 
-                return result;
+                console.log(result);
+
+                final.push(result);
             });
+
+            return final;
             
         });
 
