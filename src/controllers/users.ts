@@ -69,7 +69,6 @@ export const updateUser: RequestHandler = (req, res) => {
         .catch(() => {
             res.status(500).send('Internal error')
         });
-    
 };
 
 export const deleteUser: RequestHandler = (req, res) => {

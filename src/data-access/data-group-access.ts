@@ -1,9 +1,16 @@
 import { GroupModel } from '../models/group';
+import { UserModel } from '../models/user';
+import { UserGroup } from '../models/userGroup';
+import { sequelize } from '../config/database';
 
 class DataGroupAccess {
     model: any;
-    constructor(model) {
+    userModel: any;
+    userGroupModel: any;
+    constructor(model, userModel, userGroupModel) {
         this.model = model;
+        this.userModel = userModel;
+        this.userGroupModel = userGroupModel;
     }
 
     getGroupById = async (id: string) => {
@@ -52,6 +59,33 @@ class DataGroupAccess {
         return result;
     };
 
+    addUsersToGroup = async (groupId, usersIds) => {
+        const response = await sequelize.transaction(async (t) => {
+            const groupPromise = this.model.findByPk(groupId, {
+                raw: true,
+            });
+            const usersPromise = this.userModel.findAll({
+                where: {
+                    id: usersIds,
+                },
+                raw: true,
+            });
+
+            const [group, users] = await Promise.all([groupPromise, usersPromise]);
+            usersIds.forEach(async (userId) => {
+                
+                console.log("GROUP!!!!!!!!!!!!", group);
+                console.log("users!!!!!!!!!!!!", users);
+                const result = await this.userGroupModel.create({groupId: group.id, userId}, { returning: true });
+
+                return result;
+            });
+            
+        });
+
+        return response;
+    };
+
 }
 
-export const dataGroupAccess = new DataGroupAccess(GroupModel);
+export const dataGroupAccess = new DataGroupAccess(GroupModel, UserModel, UserGroup);

@@ -45,5 +45,13 @@ class Group {
         const result = await dataGroupAccess.deleteGroup(id);
 
         return result;
-    }
+    };
+
+    addUsersToGroup = async (groupId, userIds) => {
+        const result = await dataGroupAccess.addUsersToGroup(groupId, userIds);
+
+        return result;
+    };
 }
+
+export const groupService = new Group(GroupModel);

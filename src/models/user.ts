@@ -2,6 +2,8 @@ import { DataTypes } from 'sequelize';
 import Joi from '@hapi/joi';
 import { sequelize } from '../config/database';
 import { USER_MAX_AGE, USER_MIN_AGE } from '../helpers/helpers';
+import { GroupModel } from './group';
+import { UserGroup } from './userGroup';
 
 export const userSchema = Joi.object({
     id: Joi.string().uuid().optional(),
@@ -11,7 +13,7 @@ export const userSchema = Joi.object({
     isDeleted: Joi.boolean(),
 });
 
-export const UserModel = sequelize.define('users', {
+const Users = sequelize.define('users', {
     id: {
         type: DataTypes.UUIDV4,
         defaultValue: DataTypes.UUIDV4,
@@ -36,9 +38,16 @@ export const UserModel = sequelize.define('users', {
         defaultValue: false,
         allowNull: false,
     }
-
 }, {
     timestamps: false,
 });
 
-UserModel.associations
+Users.associate = (models) => {
+    Users.belongsToMany(models.GroupModel, {
+      through: models.UserGroup,
+      as: 'groups',
+      foreignKey: 'userId'
+    });
+  };
+
+export const UserModel = Users;

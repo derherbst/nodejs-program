@@ -1,6 +1,8 @@
 import { DataTypes } from 'sequelize';
 import Joi from '@hapi/joi';
 import { sequelize } from '../config/database';
+import { UserModel } from './user';
+import { UserGroup } from './userGroup';
 
 export const groupSchema = Joi.object({
     id: Joi.string().uuid().optional(),
@@ -8,29 +10,33 @@ export const groupSchema = Joi.object({
     permissions: Joi.array().items(Joi.string()),
 });
 
-const GroupModel = sequelize.define('groups', {
+const Groups = sequelize.define('groups', {
     id: {
         type: DataTypes.UUIDV4,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
         allowNull: false,
+        unique: true,
     },
     name: {
         type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
     },
     permissions: {
         type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: false,
     },
 }, {
     timestamps: false,
 });
 
-GroupModel.associate = (models) => {
-    GroupModel.belongsToMany(models.Users, {
-        through: 'GroupUsers',
+Groups.associate = (models) => {
+    Groups.belongsToMany(models.UserModel, {
+        through: models.UserGroup,
         as: 'users',
         foreignKey: 'groupId'
     });
 };
 
-export const Group = GroupModel;
+export const GroupModel = Groups;
