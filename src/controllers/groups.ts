@@ -112,8 +112,18 @@ export const addUsersToGroup: RequestHandler = (req, res) => {
     const userIds = req.query.userIds;
 
     groupService.addUsersToGroup(groupId, userIds)
-        .then(groups => {
-            console.log("============================", groups);
+        .then(userGroups => {
+            if (userGroups) {
+                res.status(200).json({
+                    message: 'User was added to group!',
+                    userGroups: userGroups,
+                });
+            } else {
+                res.status(404).json({
+                    status: 'failed',
+                    message: 'Failed to add user to group!'
+                });
+            }
         })
         .catch(err => console.log(err));
 }
