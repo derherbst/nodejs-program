@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import { ValidatedRequest } from 'express-joi-validation';
 import { GroupType } from '../types/types';
 import { groupService } from '../services/groups';
-import { groupSchema } from '../models/group';
+import { logger, logError } from '../logger/logger';
 
 export const createGroup: RequestHandler = (req: ValidatedRequest<GroupType>, res) => {
     const body: GroupType['query'] = req.body;
@@ -10,6 +10,11 @@ export const createGroup: RequestHandler = (req: ValidatedRequest<GroupType>, re
         name,
         permissions
     } = body;
+
+    logger.info('Calling createGroup method with parameters:', {
+        name,
+        permissions,
+    });
 
     groupService.createGroup({
         name,
@@ -22,6 +27,7 @@ export const createGroup: RequestHandler = (req: ValidatedRequest<GroupType>, re
                 createdGroup: group,
             }).end();
         } else {
+            logError(req.method, body, `Group ${name} already exists!`);
             res.status(400).json({
                 status: 'error',
                 message: `Group ${name} already exists!`,
@@ -34,6 +40,8 @@ export const createGroup: RequestHandler = (req: ValidatedRequest<GroupType>, re
 };
 
 export const getGroupById: RequestHandler = (req, res) => {
+    logger.info('Calling getGroupById method with parameter ID:', req.params.id);
+
     groupService.getGroupById(req.params.id)
         .then(group => {
             if(group) {
@@ -42,9 +50,10 @@ export const getGroupById: RequestHandler = (req, res) => {
                     group,
                 }).end();
             } else {
+                logError(req.method, req.params.id, 'Could not find group!');
                 res.status(404).json({
                     status: 'failed',
-                    message: 'Could not find group!'
+                    message: 'Could not find group!',
                 }).end();
             }
         })
@@ -54,6 +63,7 @@ export const getGroupById: RequestHandler = (req, res) => {
 };
 
 export const getGroups: RequestHandler = (req, res) => {
+    logger.info('Calling getAllGroups method');
     groupService.getAllGroups()
         .then(groups => {
             res.json({ groups });
@@ -66,6 +76,8 @@ export const getGroups: RequestHandler = (req, res) => {
 export const updateGroup: RequestHandler = (req, res) => {
     const { params: { id }, body: updateBody } = req;
 
+    logger.info('Calling updateGroup method with parameters:', {id, updateBody});
+
     groupService.updateGroup({id, updateBody})
         .then(group => {
             if(group) {
@@ -74,6 +86,7 @@ export const updateGroup: RequestHandler = (req, res) => {
                     updatedGroup: group,
                 }).end();
             } else {
+                logError(req.method, {id, updateBody}, 'Could not find group!');
                 res.status(404).json({
                     status: 'failed',
                     message: 'Could not find group!'
@@ -88,6 +101,8 @@ export const updateGroup: RequestHandler = (req, res) => {
 export const deleteGroup: RequestHandler = (req, res) => {
     const groupId = req.params.id;
 
+    logger.info('Calling deleteGroup method with parameter ID:', groupId);
+
     groupService.deleteGroup(groupId)
         .then(group => {
             if (group) {
@@ -96,6 +111,7 @@ export const deleteGroup: RequestHandler = (req, res) => {
                     updatedUser: group,
                 });
             } else {
+                logError(req.method, groupId, 'Could not find group!');
                 res.status(404).json({
                     status: 'failed',
                     message: 'Could not find group!'
@@ -111,6 +127,8 @@ export const addUsersToGroup: RequestHandler = (req, res) => {
     const groupId = req.query.groupId;
     const userIds = req.query.userIds;
 
+    logger.info('Calling addUsersToGroup method with parameters:', {groupId, userIds});
+
     groupService.addUsersToGroup(groupId, userIds)
         .then(userGroups => {
             if (userGroups) {
@@ -119,11 +137,12 @@ export const addUsersToGroup: RequestHandler = (req, res) => {
                     userGroups: userGroups,
                 });
             } else {
+                logError(req.method, {groupId, userIds}, 'Failed to add user to group!');
                 res.status(404).json({
                     status: 'failed',
-                    message: 'Failed to add user to group!'
+                    message: 'Failed to add user to group!',
                 });
             }
         })
         .catch(err => console.log(err));
-}
+};

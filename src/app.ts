@@ -2,12 +2,11 @@ import { config } from 'dotenv';
 config();
 import express, { Request, Response } from 'express';
 import { json } from 'body-parser';
-import pino from 'pino';
-import expressPinoLogger from "express-pino-logger";
 import { sequelize } from './config/database';
 import userRoutes from './routes/users';
 import groupRoutes from './routes/groups';
 import { PORT } from './helpers/helpers';
+import { logger } from './logger/logger';
 
 sequelize.authenticate()
     .then(() => console.log('DB connected...'))
@@ -15,16 +14,7 @@ sequelize.authenticate()
 
 const app = express();
 
-console.log(process.env.LOG_LEVEL);
-
-export const logger = pino({
-    name: 'user-app',
-});
-
 app.use(json());
-app.use(expressPinoLogger({
-    logger,
-}));
 
 app.use('/users', userRoutes);
 app.use('/groups', groupRoutes);
@@ -34,6 +24,7 @@ app.use((
     req: Request,
     res: Response,
 ) => {
+    logger.error(`ERROR: ${err}`);
     res.status(500).json({ message: err.message });
 });
 
