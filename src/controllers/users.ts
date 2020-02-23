@@ -3,6 +3,7 @@ import { ValidatedRequest } from 'express-joi-validation';
 import { UserType } from '../types/types';
 import { userService } from '../services/user';
 import { userSchema } from '../models/user';
+import { logger } from '../app';
 
 export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res) => {
     const body: UserType['query'] = req.body;
@@ -12,6 +13,8 @@ export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res)
         age,
         isDeleted
     } = body;
+
+    logger.info('Calling createUser method with parameters');
 
     userService.createUser({
         login,
