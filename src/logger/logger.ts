@@ -20,7 +20,7 @@ export const logger = createLogger({
 
 export const logError = (methodName, params, errorMessage) => {
     logger.error(`${methodName} ${params} ${errorMessage}`);
-}
+};
 
 process.on('uncaughtException', function (err) {
     logger.error('uncaughtException', { message : err.message, stack : err.stack });

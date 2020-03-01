@@ -11,10 +11,10 @@ export const createGroup: RequestHandler = (req: ValidatedRequest<GroupType>, re
         permissions
     } = body;
 
-    logger.info('Calling createGroup method with parameters:', {
+    logger.info(`Calling createGroup method with parameters: ${{
         name,
         permissions,
-    });
+    }}`);
 
     groupService.createGroup({
         name,
@@ -40,7 +40,7 @@ export const createGroup: RequestHandler = (req: ValidatedRequest<GroupType>, re
 };
 
 export const getGroupById: RequestHandler = (req, res) => {
-    logger.info('Calling getGroupById method with parameter ID:', req.params.id);
+    logger.info(`Calling getGroupById method with parameter ID: ${ req.params.id }`);
 
     groupService.getGroupById(req.params.id)
         .then(group => {
@@ -76,7 +76,7 @@ export const getGroups: RequestHandler = (req, res) => {
 export const updateGroup: RequestHandler = (req, res) => {
     const { params: { id }, body: updateBody } = req;
 
-    logger.info('Calling updateGroup method with parameters:', {id, updateBody});
+    logger.info(`Calling updateGroup method with parameters: ${{id, updateBody}}`);
 
     groupService.updateGroup({id, updateBody})
         .then(group => {
@@ -101,7 +101,7 @@ export const updateGroup: RequestHandler = (req, res) => {
 export const deleteGroup: RequestHandler = (req, res) => {
     const groupId = req.params.id;
 
-    logger.info('Calling deleteGroup method with parameter ID:', groupId);
+    logger.info(`Calling deleteGroup method with parameter ID: ${ groupId }`);
 
     groupService.deleteGroup(groupId)
         .then(group => {
@@ -127,7 +127,7 @@ export const addUsersToGroup: RequestHandler = (req, res) => {
     const groupId = req.query.groupId;
     const userIds = req.query.userIds;
 
-    logger.info('Calling addUsersToGroup method with parameters:', {groupId, userIds});
+    logger.info(`Calling addUsersToGroup method with parameters: ${{groupId, userIds}}`);
 
     groupService.addUsersToGroup(groupId, userIds)
         .then(userGroups => {

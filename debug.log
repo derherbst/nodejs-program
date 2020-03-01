@@ -1,7 +1,0 @@
-{ login: 'da',
-  password: 'Marina',
-  age: 27,
-  isDeleted: false,
-  level: 'info',
-  message: 'Calling createUser method with parameters:',
-  timestamp: '2020-02-23T20:45:04.426Z' }

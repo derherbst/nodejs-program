@@ -14,7 +14,7 @@ export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res)
         isDeleted
     } = body;
 
-    logger.info('Calling createUser method with parameters:', body);
+    logger.info(`Calling createUser method with parameters: ${body}`);
 
     userService.createUser({
         login,
@@ -44,7 +44,7 @@ export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res)
 export const getUsers: RequestHandler = (req, res) => {
     const { loginSubstring, limit } = req.query;
 
-    logger.info('Calling getUsers method with parameters:', { loginSubstring, limit });
+    logger.info(`Calling getUsers method with parameters: ${{ loginSubstring, limit }}`);
 
     userService.getUsers({limit, loginSubstring})
         .then(suggestedUsers => {
@@ -58,7 +58,7 @@ export const getUsers: RequestHandler = (req, res) => {
 export const updateUser: RequestHandler = (req, res) => {
     const { params: { id }, body: updateBody } = req;
 
-    logger.info('Calling updateUser method with parameters:', {id, updateBody});
+    logger.info(`Calling updateUser method with parameters: ${{id, updateBody}}`);
 
     userService.updateUser({id, updateBody})
         .then(user => {
@@ -83,7 +83,7 @@ export const updateUser: RequestHandler = (req, res) => {
 export const deleteUser: RequestHandler = (req, res) => {
     const userId = req.params.id;
 
-    logger.info('Calling deleteUser method with parameter ID:', userId);
+    logger.info(`Calling deleteUser method with parameter ID: ${userId}`);
 
     userService.deleteUser(userId)
         .then(user => {
