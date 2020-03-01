@@ -14,16 +14,12 @@ class DataGroupAccess {
     }
 
     getGroupById = async (id: string) => {
-        const result = await this.model.findByPk(id);
-
-        return result;
+        return await this.model.findByPk(id);
     };
 
     getAllGroups = async () => {
         const order = ['name', 'ASC'];
-        const result = await this.model.findAll(order);
-
-        return result;
+        return await this.model.findAll(order);
     };
 
     getGroupByParams = (param, value) => {
@@ -35,12 +31,11 @@ class DataGroupAccess {
     };
 
     createGroup = async (data) => {
-        const result = await this.model.create(data);
-        return result;
+        return await this.model.create(data);
     };
 
     updateGroup = async ({id, updateBody}) => {
-        return this.model.update({...updateBody}, {
+        return await this.model.update({...updateBody}, {
             where: {
                 id,
             },
@@ -49,18 +44,16 @@ class DataGroupAccess {
     };
 
     deleteGroup = async (id: string) => {
-        const result = await this.model.destroy({
+        return this.model.destroy({
             where: {
                 id,
             },
             force: true,
         });
-
-        return result;
     };
 
     addUsersToGroup = async (groupId, usersIds) => {
-        const response = await sequelize.transaction(async (t) => {
+        return sequelize.transaction(async (t) => {
             const groupPromise = this.model.findByPk(groupId, {
                 raw: true,
             });
@@ -71,19 +64,20 @@ class DataGroupAccess {
                 raw: true,
             });
 
-            const [group, users] = await Promise.all([groupPromise, usersPromise]);
-            return usersIds.reduce(async (acc, userId) => {
-                const result = await this.userGroupModel.create({groupId: group.id, userId}, { returning: true });
+            const [ group, users ] = await Promise.all([groupPromise, usersPromise]);
+            const userGroupPromises = usersIds.reduce((acc, userId) => {
+                const result = this.userGroupModel.create({ groupId: group.id, userId }, { returning: true });
 
                 if (result) {
-                    (await acc).push(result);
+                    (acc).push(result);
                 }
-                
-                return acc;
-            }, Promise.resolve([]));
-        });
 
-        return response;
+                return acc;
+            }, []);
+            const [ userGroupCollection ] = await Promise.all(userGroupPromises);
+
+            return userGroupCollection;
+        });
     };
 
 }

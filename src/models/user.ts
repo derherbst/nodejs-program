@@ -2,8 +2,6 @@ import { DataTypes } from 'sequelize';
 import Joi from '@hapi/joi';
 import { sequelize } from '../config/database';
 import { USER_MAX_AGE, USER_MIN_AGE } from '../helpers/helpers';
-import { GroupModel } from './group';
-import { UserGroup } from './userGroup';
 
 export const userSchema = Joi.object({
     id: Joi.string().uuid().optional(),

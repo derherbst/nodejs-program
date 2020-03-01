@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import { ValidatedRequest } from 'express-joi-validation';
 import { GroupType } from '../types/types';
 import { groupService } from '../services/groups';
-import { groupSchema } from '../models/group';
+import { failedSearchResponse } from '../helpers/helpers';
 
 export const createGroup: RequestHandler = (req: ValidatedRequest<GroupType>, res) => {
     const body: GroupType['query'] = req.body;
@@ -38,14 +38,11 @@ export const getGroupById: RequestHandler = (req, res) => {
         .then(group => {
             if(group) {
                 res.status(200).json({
-                    message: 'Updated!',
+                    message: `Found a group with id ${req.params.id}`,
                     group,
                 }).end();
             } else {
-                res.status(404).json({
-                    status: 'failed',
-                    message: 'Could not find group!'
-                }).end();
+                res.status(404).json(failedSearchResponse('group')).end();
             }
         })
         .catch(() => {
@@ -74,10 +71,7 @@ export const updateGroup: RequestHandler = (req, res) => {
                     updatedGroup: group,
                 }).end();
             } else {
-                res.status(404).json({
-                    status: 'failed',
-                    message: 'Could not find group!'
-                }).end();
+                res.status(404).json(failedSearchResponse('group')).end();
             }
         })
         .catch(() => {
@@ -96,10 +90,7 @@ export const deleteGroup: RequestHandler = (req, res) => {
                     updatedUser: group,
                 });
             } else {
-                res.status(404).json({
-                    status: 'failed',
-                    message: 'Could not find group!'
-                });
+                res.status(404).json(failedSearchResponse('group'));
             }
         })
         .catch(() => {
@@ -119,11 +110,8 @@ export const addUsersToGroup: RequestHandler = (req, res) => {
                     userGroups: userGroups,
                 });
             } else {
-                res.status(404).json({
-                    status: 'failed',
-                    message: 'Failed to add user to group!'
-                });
+                res.status(404).json(failedSearchResponse('group'));
             }
         })
         .catch(err => console.log(err));
-}
+};

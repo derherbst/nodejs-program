@@ -8,9 +8,7 @@ class DataAccess {
     }
 
     getUserById = async (id: string) => {
-        const result = await this.model.findByPk(id);
-
-        return result;
+        return await this.model.findByPk(id);
     };
 
     getUserByParams = (param, value) => {
@@ -23,17 +21,15 @@ class DataAccess {
 
     getAllUsers = async (limit: number) => {
         const order = ['login', 'ASC'];
-        const result = await this.model.findAll(
+        return await this.model.findAll(
             limit,
             order,
-        )
-
-        return result;
+        );
     };
 
     getAutoSuggestUsers = async ({limit, loginSubstring}) => {
         const order = ['login', 'ASC'];
-        const result = await this.model.findAll({
+        return await this.model.findAll({
             limit,
             where: {
                 login: {
@@ -42,8 +38,6 @@ class DataAccess {
             },
             order,
         });
-
-        return result;
     };
 
     updateUser = async ({id, updateBody}) => {
@@ -56,8 +50,7 @@ class DataAccess {
     };
 
     createUser = async (data) => {
-        const result = await this.model.create(data);
-        return result;
+        return await this.model.create(data);
     };
 }
 
