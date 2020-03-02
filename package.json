@@ -9,7 +9,9 @@
     "task1": "nodemon --exec babel-node ./task1/task1.1/index.js",
     "task2": "nodemon --exec babel-node ./task1/task1.2/index.js",
     "dev": "nodemon dist/app.js",
-    "create": "echo \"Creating database...\" && npx sequelize db:create && nodemon dist/create.js"
+    "createUsersTable": "echo \"Creating database...\" && npx sequelize db:create && nodemon dist/create.js",
+    "createGroupsTable": "echo \"Creating groups table...\" && nodemon dist/createGroupsTable.js",
+    "createUsersGroupsTable": "echo \"Creating users-groups database...\" && nodemon dist/createUserGroupTable.js"
   },
   "repository": {
     "type": "git",

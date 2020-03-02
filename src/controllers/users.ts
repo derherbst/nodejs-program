@@ -3,6 +3,7 @@ import { ValidatedRequest } from 'express-joi-validation';
 import { UserType } from '../types/types';
 import { userService } from '../services/user';
 import { userSchema } from '../models/user';
+import { failedSearchResponse } from "../helpers/helpers";
 
 export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res) => {
     const body: UserType['query'] = req.body;
@@ -60,16 +61,12 @@ export const updateUser: RequestHandler = (req, res) => {
                     updatedUser: user,
                 }).end();
             } else {
-                res.status(404).json({
-                    status: 'failed',
-                    message: 'Could not find user!'
-                }).end();
+                res.status(404).json(failedSearchResponse('user')).end();
             }
         })
         .catch(() => {
             res.status(500).send('Internal error')
         });
-    
 };
 
 export const deleteUser: RequestHandler = (req, res) => {
@@ -83,10 +80,7 @@ export const deleteUser: RequestHandler = (req, res) => {
                     updatedUser: user,
                 });
             } else {
-                res.status(404).json({
-                    status: 'failed',
-                    message: 'Could not find user!'
-                });
+                res.status(404).json(failedSearchResponse('user'));
             }
         })
         .catch(() => {

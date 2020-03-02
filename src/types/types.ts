@@ -9,3 +9,13 @@ export interface UserType extends ValidatedRequestSchema {
         isDeleted: boolean,
     }
 }
+
+type Permission = 'READ' | 'WRITE' | 'DELETE' | 'SHARE' | 'UPLOAD_FILES';
+
+export interface GroupType extends ValidatedRequestSchema {
+    [ContainerTypes.Query]: {
+        id: string,
+        name: string,
+        permissions: Array<Permission>,
+    }
+}

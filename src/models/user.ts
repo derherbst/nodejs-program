@@ -11,7 +11,7 @@ export const userSchema = Joi.object({
     isDeleted: Joi.boolean(),
 });
 
-export const UserModel = sequelize.define('users', {
+const Users = sequelize.define('users', {
     id: {
         type: DataTypes.UUIDV4,
         defaultValue: DataTypes.UUIDV4,
@@ -36,7 +36,16 @@ export const UserModel = sequelize.define('users', {
         defaultValue: false,
         allowNull: false,
     }
-
 }, {
     timestamps: false,
 });
+
+Users.associate = (models) => {
+    Users.belongsToMany(models.GroupModel, {
+      through: 'UserGroups',
+      as: 'groups',
+      foreignKey: 'userId'
+    });
+  };
+
+export const UserModel = Users;
