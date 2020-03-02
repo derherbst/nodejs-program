@@ -9,6 +9,7 @@
     "task1": "nodemon --exec babel-node ./task1/task1.1/index.js",
     "task2": "nodemon --exec babel-node ./task1/task1.2/index.js",
     "dev": "nodemon dist/app.js",
+    "debug": "cross-env LOG_LEVEL=info nodemon dist/app.js",
     "createUsersTable": "echo \"Creating database...\" && npx sequelize db:create && nodemon dist/create.js",
     "createGroupsTable": "echo \"Creating groups table...\" && nodemon dist/createGroupsTable.js",
     "createUsersGroupsTable": "echo \"Creating users-groups database...\" && nodemon dist/createUserGroupTable.js"
@@ -32,8 +33,12 @@
     "@types/hapi__joi": "^16.0.4",
     "@types/uuid": "^3.4.6",
     "babel-eslint": "^10.0.3",
+    "cross-env": "^7.0.0",
     "csvtojson": "^2.0.10",
+    "debug": "^4.1.1",
+    "dotenv": "^8.2.0",
     "eslint": "^6.8.0",
+    "express-pino-logger": "^4.0.0",
     "nodemon": "^2.0.1",
     "sequelize-cli": "^5.5.1",
     "ts-node": "^8.5.4",
@@ -47,6 +52,7 @@
     "joi-extract-type": "^15.0.2",
     "pg": "7.18.1",
     "pg-hstore": "2.3.3",
-    "sequelize": "^5.21.3"
+    "sequelize": "^5.21.3",
+    "winston": "^3.2.1"
   }
 }

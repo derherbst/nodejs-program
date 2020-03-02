@@ -3,6 +3,7 @@ import { ValidatedRequest } from 'express-joi-validation';
 import { UserType } from '../types/types';
 import { userService } from '../services/user';
 import { userSchema } from '../models/user';
+import { logError, logger } from '../logger/logger';
 import { failedSearchResponse } from "../helpers/helpers";
 
 export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res) => {
@@ -13,6 +14,8 @@ export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res)
         age,
         isDeleted
     } = body;
+
+    logger.info(`Calling createUser method with parameters: ${body}`);
 
     userService.createUser({
         login,
@@ -27,6 +30,7 @@ export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res)
                 createdUser: user,
             }).end();
         } else {
+            logError(req.method, body, `User ${req.body.login} already exists!`);
             res.status(400).json({
                 status: 'error',
                 message: `User ${req.body.login} already exists!`,
@@ -41,6 +45,8 @@ export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res)
 export const getUsers: RequestHandler = (req, res) => {
     const { loginSubstring, limit } = req.query;
 
+    logger.info(`Calling getUsers method with parameters: ${{ loginSubstring, limit }}`);
+
     userService.getUsers({limit, loginSubstring})
         .then(suggestedUsers => {
             res.json({ users: suggestedUsers });
@@ -53,6 +59,8 @@ export const getUsers: RequestHandler = (req, res) => {
 export const updateUser: RequestHandler = (req, res) => {
     const { params: { id }, body: updateBody } = req;
 
+    logger.info(`Calling updateUser method with parameters: ${{id, updateBody}}`);
+
     userService.updateUser({id, updateBody})
         .then(user => {
             if(user) {
@@ -61,6 +69,7 @@ export const updateUser: RequestHandler = (req, res) => {
                     updatedUser: user,
                 }).end();
             } else {
+                logError(req.method, {id, updateBody}, 'Could not find user!');
                 res.status(404).json(failedSearchResponse('user')).end();
             }
         })
@@ -72,6 +81,8 @@ export const updateUser: RequestHandler = (req, res) => {
 export const deleteUser: RequestHandler = (req, res) => {
     const userId = req.params.id;
 
+    logger.info(`Calling deleteUser method with parameter ID: ${userId}`);
+
     userService.deleteUser(userId)
         .then(user => {
             if (user) {
@@ -80,6 +91,7 @@ export const deleteUser: RequestHandler = (req, res) => {
                     updatedUser: user,
                 });
             } else {
+                logError(req.method, userId, 'Could not find user!');
                 res.status(404).json(failedSearchResponse('user'));
             }
         })
@@ -93,6 +105,7 @@ export const validateUserData = (req, res, next): void => {
     const { error } = result;
 
     if (error != null) {
+        logError(req.method, req.body, error);
         res.status(400).json({
             status: 'error',
             error: error,

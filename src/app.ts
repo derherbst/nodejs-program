@@ -1,9 +1,12 @@
+import { config } from 'dotenv';
+config();
 import express, { Request, Response } from 'express';
 import { json } from 'body-parser';
 import { sequelize } from './config/database';
 import userRoutes from './routes/users';
 import groupRoutes from './routes/groups';
 import { PORT } from './helpers/helpers';
+import { logger } from './logger/logger';
 
 sequelize.authenticate()
     .then(() => console.log('DB connected...'))
@@ -21,6 +24,7 @@ app.use((
     req: Request,
     res: Response,
 ) => {
+    logger.error(`ERROR: ${err}`);
     res.status(500).json({ message: err.message });
 });
 
