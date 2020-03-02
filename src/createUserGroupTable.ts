@@ -4,4 +4,4 @@ import { CREATE_USER_GROUPS_TABLE, DROP_USER_GROUPS_TABLE } from './helpers/help
 sequelize
     .query(CREATE_USER_GROUPS_TABLE)
     .then(() => console.log('USER-GROUP TABLE CREATED...'))
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(err));

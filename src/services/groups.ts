@@ -1,5 +1,5 @@
-import { GroupModel } from '../models/group';
-import { dataGroupAccess } from '../data-access/data-group-access';
+import {GroupModel} from '../models/group';
+import {dataGroupAccess} from '../data-access/data-group-access';
 
 class Group {
     model: any;
@@ -8,21 +8,17 @@ class Group {
     }
 
     getGroupById = async (id: string) => {
-        const result = await dataGroupAccess.getGroupById(id);
-        
-        return result;
+        return await dataGroupAccess.getGroupById(id);
     };
 
     getAllGroups = async () => {
-        const result = await dataGroupAccess.getAllGroups();
-
-        return result;
+        return await dataGroupAccess.getAllGroups();
     };
 
     createGroup = async (inputData) => {
         const group = await dataGroupAccess.getGroupByParams('name', inputData.name);
 
-        if (group) return null;
+        if (group) return;
 
         return dataGroupAccess.createGroup(inputData);
     };
@@ -30,27 +26,21 @@ class Group {
     updateGroup = async ({id, updateBody}) => {
         const group = await dataGroupAccess.getGroupById(id);
 
-        if (!group) return null;
+        if (!group) return;
 
-        const result = await dataGroupAccess.updateGroup({id, updateBody});
-
-        return result;
+        return await dataGroupAccess.updateGroup({id, updateBody});
     };
 
     deleteGroup = async (id) => {
         const group = await dataGroupAccess.getGroupById(id);
 
-        if (!group) return null;
+        if (!group) return;
 
-        const result = await dataGroupAccess.deleteGroup(id);
-
-        return result;
+        return await dataGroupAccess.deleteGroup(id);
     };
 
     addUsersToGroup = async (groupId, userIds) => {
-        const result = await dataGroupAccess.addUsersToGroup(groupId, userIds);
-
-        return result;
+        return await dataGroupAccess.addUsersToGroup(groupId, userIds);
     };
 }
 

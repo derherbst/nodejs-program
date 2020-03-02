@@ -4,6 +4,7 @@ import { UserType } from '../types/types';
 import { userService } from '../services/user';
 import { userSchema } from '../models/user';
 import { logError, logger } from '../logger/logger';
+import { failedSearchResponse } from "../helpers/helpers";
 
 export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res) => {
     const body: UserType['query'] = req.body;
@@ -69,10 +70,7 @@ export const updateUser: RequestHandler = (req, res) => {
                 }).end();
             } else {
                 logError(req.method, {id, updateBody}, 'Could not find user!');
-                res.status(404).json({
-                    status: 'failed',
-                    message: 'Could not find user!',
-                }).end();
+                res.status(404).json(failedSearchResponse('user')).end();
             }
         })
         .catch(() => {
@@ -94,10 +92,7 @@ export const deleteUser: RequestHandler = (req, res) => {
                 });
             } else {
                 logError(req.method, userId, 'Could not find user!');
-                res.status(404).json({
-                    status: 'failed',
-                    message: 'Could not find user!'
-                });
+                res.status(404).json(failedSearchResponse('user'));
             }
         })
         .catch(() => {

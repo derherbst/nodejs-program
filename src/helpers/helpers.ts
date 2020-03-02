@@ -16,3 +16,8 @@ export const CREATE_USER_GROUPS_TABLE = `CREATE TABLE IF NOT EXISTS "UserGroups"
     PRIMARY KEY ("id")
 );`;
 export const DROP_USER_GROUPS_TABLE = 'DROP TABLE IF EXISTS "UserGroup" CASCADE';
+
+export const failedSearchResponse = (object) => ({
+    status: 'failed',
+    message: `Could not find ${object}!`
+});
