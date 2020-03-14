@@ -12,7 +12,7 @@ export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res)
         login,
         password,
         age,
-        isDeleted
+        isDeleted,
     } = body;
 
     logger.info(`Calling createUser method with parameters: ${body}`);
@@ -21,7 +21,7 @@ export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res)
         login,
         password,
         age,
-        isDeleted
+        isDeleted,
     })
     .then(user => {
         if (user) {
@@ -112,5 +112,50 @@ export const validateUserData = (req, res, next): void => {
         }).end();
     } else {
         next();
+    }
+};
+
+export const login = (req, res, next) => {
+    const { login, password } = req.body;
+
+    logger.info(`User ${login} is trying to log in`);
+
+    userService.authenticate({login, password})
+        .then(token => {
+            if (token) {
+                res.status(200).json({
+                    message: 'User logged in!',
+                    token,
+                });
+                next();
+            } else {
+                logError(req.method, req.body, `Bad username/password combination: ${login} and ${password}.`);
+                res.status(400).json({
+                    status: 'error',
+                    message: `Bad username/password combination.`,
+                }).end();
+            }
+        })
+        .catch(() => {
+            res.status(500).send('Internal error')
+        });
+};
+
+export const checkToken = (req, res, next) => {
+    const token = req.headers['http-authorization'];
+
+    if (token) {
+        const response = userService.checkToken(token);
+
+        if (response) {
+            res.status(403).json({
+                status: 'error',
+                message: 'Failed to authenticate token.',
+            });
+        } else {
+            next();
+        }
+    } else {
+        res.status(401).send('No token provided.');
     }
 };
