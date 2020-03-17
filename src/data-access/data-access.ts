@@ -19,7 +19,7 @@ class DataAccess {
         });
     };
 
-    getAllUsers = async (limit: number) => {
+    getAllUsers = async (limit?: number) => {
         const order = ['login', 'ASC'];
         return await this.model.findAll(
             limit,

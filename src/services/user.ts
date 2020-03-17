@@ -1,5 +1,7 @@
 import { UserModel } from '../models/user';
 import { dataAccess } from '../data-access/data-access';
+import jwt from 'jsonwebtoken';
+import { response } from 'express';
 
 class User {
     model: any;
@@ -7,10 +9,33 @@ class User {
         this.model = model;
     }
 
-    getUsers = async ({limit, loginSubstring}) => {
+    authenticate = async ({login, password}) => {
+        const user = await dataAccess.getUserByParams('login', login);
+
+        if (!user || user.password !== password) return;
+
+        const payload = {'sub': user.id};
+        const token = jwt.sign(payload, 'secret', {expiresIn: 3000});
+
+        return token;
+    };
+
+    checkToken = (token) => {
+        let result;
+
+        jwt.verify(token, 'secret', (error) => {
+            if (error) {
+                result = error;
+            }   
+        });
+
+        return result;
+    };
+
+    getUsers = ({limit, loginSubstring}) => {
         return loginSubstring
-            ?  await dataAccess.getAutoSuggestUsers({limit, loginSubstring})
-            : await dataAccess.getAllUsers(limit)
+            ?  dataAccess.getAutoSuggestUsers({limit, loginSubstring})
+            : dataAccess.getAllUsers(limit)
     };
 
     createUser = async (inputData) => {
@@ -26,7 +51,7 @@ class User {
 
         if (!user) return;
 
-        return await dataAccess.updateUser({id, updateBody});
+        return dataAccess.updateUser({id, updateBody});
     };
 
     deleteUser = async (id) => {
@@ -35,7 +60,7 @@ class User {
 
         if (!user) return;
 
-        return await dataAccess.updateUser({id, updateBody});
+        return dataAccess.updateUser({id, updateBody});
     }
 }
 
