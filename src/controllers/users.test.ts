@@ -1,3 +1,4 @@
+import { json } from 'body-parser';
 import { internalError, successResponse } from './../helpers/helpers';
 import {
     mockRequest,
@@ -9,9 +10,8 @@ import {
     getUsers,
     updateUser,
     deleteUser,
-    validateUserData,
 } from './users';
-import { User, userService } from './../services/user';
+import { userService } from './../services/user';
 
 jest.mock('./../services/user')
 
@@ -20,9 +20,15 @@ jest.mock('./../helpers/helpers', () => ({
     successResponse: jest.fn(),
 }));
 
-// beforeEach(() => {
-//     jest.clearAllMocks();
-// });
+const createMockUser = (data) => ({
+    id: '367a2a34-f464-4ecd-9d3b-aba998312977',
+    login: 'derHerbst',
+    password: '123456',
+    age: 27,
+    isDeleted: false,
+    ...data,
+});
+
 
 describe('Call createUser method', () => {
     beforeEach(() => {
@@ -33,7 +39,7 @@ describe('Call createUser method', () => {
             isDeleted: false,
         });
     });
-    it('should return status 200 and correct value', async () => {
+    it('should create user', async () => {
         userService.createUser.mockClear();
         const req = mockRequest();
         req.body = {
@@ -44,32 +50,16 @@ describe('Call createUser method', () => {
         };
         const res = mockResponse();
         const next = mockNext();
-        const responseData = {
-            ...req.body,
-            id: '367a2a34-f464-4ecd-9d3b-aba998312977',
-        };
-        // expect.assertions(1);
-
-        // expect(userService.createUser(req.body)).resolves.toEqual(responseData);
 
         await createUser(req, res, next);
 
         expect(userService.createUser).toHaveBeenCalledTimes(1);
         expect(userService.createUser).toHaveBeenCalledWith(req.body);
-
-        // expect(res.json).toBeCalledWith({
-        //     message: 'User was created!',
-        //     createdUser: responseData,
-        // });
-        // expect(res.status).toBeCalledWith(200);
     });
 
     it('should return status error', async () => {
         userService.createUser = jest.fn().mockRejectedValueOnce(new Error());
 
-
-        // userService.createUser.mockClear();
-        // internalError = jest.fn();
         const req = mockRequest();
         req.body = {
             password: '123456',
@@ -80,18 +70,7 @@ describe('Call createUser method', () => {
         const next = mockNext();
         await createUser(req, res, next);
 
-        // expect.assertions(1);
-
-        // expect(resUtils.internalError).toBeCalledTimes(1);
-        
-        // expect(resUtils.internalError).toBeCalledWith(resMock
-
         expect(internalError).toBeCalledTimes(1);
-        // expect(res.status).toBeCalledWith(500);
-        // expect(internalError).toBeCalledWith(res);
-
-        // return expect(userService.createUser(req.body)).rejects.toEqual(new Error('Error!'));
-        
     })
 });
 describe('Call getUsers method', () => {
@@ -167,11 +146,10 @@ describe('Call updateUser method', () => {
 
     it('should update user', async () => {
         const req = mockRequest();
-        req.query = {
-            updateBody: {
-                password: '666',
-            }
+        req.body = {
+            password: '666',
         };
+        const updateBody = req.body;
         req.params = {
             id: '367a2a34-f464-4ecd-9d3b-aba998312977',
         }
@@ -180,6 +158,54 @@ describe('Call updateUser method', () => {
         await updateUser(req, res, next);
 
         expect(userService.updateUser).toBeCalledTimes(1);
-        expect(userService.updateUser).toBeCalledWith({...req.params, ...req.query});
+        expect(userService.updateUser).toBeCalledWith({...req.params, updateBody});
+    });
+
+    // it('with error', async () => {
+    //     userService.updateUser.mockClear();
+    //     userService.updateUser = jest.fn().mockRejectedValueOnce(new Error());
+
+    //     const req = mockRequest();
+    //     req.body = {};
+    //     const updateBody = req.body;
+    //     req.params = {
+    //         id: '367a2a34-f464-4ecd-9d3b-aba998312977',
+    //     }
+    //     const res = mockResponse();
+    //     const next = mockNext();
+    //     await updateUser(req, res, next);
+
+    //     expect(userService.updateUser).toBeCalledTimes(1);
+    //     expect(userService.updateUser).toBeCalledWith({...req.params, updateBody});
+
+    //     expect(res.status).toBeCalledWith(401);
+    //     expect(res.json).toBeCalledWith({
+    //         status: 'failed',
+    //         message: `Could not find!`
+    //     });
+    // })
+});
+
+describe('Call deleteUser method', () => {
+    beforeEach(() => {
+        userService.deleteUser = jest.fn().mockResolvedValueOnce({
+            id: '367a2a34-f464-4ecd-9d3b-aba998312977',
+            login: 'derHerbst',
+            password: '123456',
+            age: 27,
+            isDeleted: true,
+        });;
+    });
+    it('should delete user', async () => {
+        const req = mockRequest();
+        req.params = {
+            id: '367a2a34-f464-4ecd-9d3b-aba998312977',
+        }
+        const res = mockResponse();
+        const next = mockNext();
+        await deleteUser(req, res, next);
+
+        expect(userService.deleteUser).toBeCalledTimes(1);
+        expect(userService.deleteUser).toBeCalledWith(req.params.id);
     });
 });

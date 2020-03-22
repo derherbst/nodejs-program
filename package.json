@@ -8,7 +8,7 @@
     "pack": "tsc",
     "task1": "nodemon --exec babel-node ./task1/task1.1/index.js",
     "task2": "nodemon --exec babel-node ./task1/task1.2/index.js",
-    "dev": "nodemon --exec babel-node src/app.js -r dotenv/config",
+    "dev": "nodemon --exec babel-node dist/app.js -r dotenv/config",
     "debug": "cross-env LOG_LEVEL=info nodemon dist/app.js",
     "createUsersTable": "echo \"Creating database...\" && npx sequelize db:create && nodemon dist/create.js",
     "createGroupsTable": "echo \"Creating groups table...\" && nodemon dist/createGroupsTable.js",
@@ -51,6 +51,7 @@
     "uuid": "^3.3.3"
   },
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@hapi/joi": "^16.1.8",
     "@types/cors": "^2.8.6",
     "@types/jsonwebtoken": "^8.3.8",
