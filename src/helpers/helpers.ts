@@ -21,11 +21,3 @@ export const failedSearchResponse = (object) => ({
     status: 'failed',
     message: `Could not find ${object}!`
 });
-
-export const internalError = (res) => {
-    return res.status(500).send('Internal error');
-};
-
-export const successResponse = (res, body) => {
-    return res.status(200).send(body);
-};

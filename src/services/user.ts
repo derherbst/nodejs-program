@@ -1,8 +1,9 @@
 import { UserModel } from '../models/user';
 import { dataAccess } from '../data-access/data-access';
 import jwt from 'jsonwebtoken';
+import { response } from 'express';
 
-export class User {
+class User {
     model: any;
     constructor(model) {
         this.model = model;
@@ -33,7 +34,7 @@ export class User {
 
     getUsers = ({limit, loginSubstring}) => {
         return loginSubstring
-            ? dataAccess.getAutoSuggestUsers({limit, loginSubstring})
+            ?  dataAccess.getAutoSuggestUsers({limit, loginSubstring})
             : dataAccess.getAllUsers(limit)
     };
 

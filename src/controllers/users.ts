@@ -4,7 +4,7 @@ import { UserType } from '../types/types';
 import { userService } from '../services/user';
 import { userSchema } from '../models/user';
 import { logError, logger } from '../logger/logger';
-import { failedSearchResponse, internalError } from "../helpers/helpers";
+import { failedSearchResponse } from "../helpers/helpers";
 
 export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res) => {
     const body: UserType['query'] = req.body;
@@ -38,7 +38,7 @@ export const createUser: RequestHandler = (req: ValidatedRequest<UserType>, res)
         }
     })
     .catch(() => {
-        internalError(res);
+        res.status(500).send('Internal error')
     });
 };
 
@@ -52,7 +52,7 @@ export const getUsers: RequestHandler = (req, res) => {
             res.json({ users: suggestedUsers });
         })
         .catch(() => {
-            internalError(res);
+            res.status(500).send('Internal error')
         });
 };
 
@@ -74,7 +74,7 @@ export const updateUser: RequestHandler = (req, res) => {
             }
         })
         .catch(() => {
-            internalError(res);
+            res.status(500).send('Internal error')
         });
 };
 
@@ -96,7 +96,7 @@ export const deleteUser: RequestHandler = (req, res) => {
             }
         })
         .catch(() => {
-            internalError(res);
+            res.status(500).send('Internal error')
         });
 };
 
@@ -137,7 +137,7 @@ export const login = (req, res, next) => {
             }
         })
         .catch(() => {
-            internalError(res);
+            res.status(500).send('Internal error')
         });
 };
 
